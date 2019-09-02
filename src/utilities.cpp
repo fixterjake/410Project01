@@ -28,10 +28,16 @@ void processRow(std::string row) {
 		}
 	}
 	process_stats entry;
-	entry.process_number = std::stoi(parsed[0]);
-	entry.start_time = std::stoi(parsed[1]);
-	entry.cpu_time = std::stoi(parsed[2]);
-	processStats.push_back(entry);
+	//Ensure data from file is correct
+	try {
+		entry.process_number = std::stoi(parsed[0]);
+		entry.start_time = std::stoi(parsed[1]);
+		entry.cpu_time = std::stoi(parsed[2]);
+		processStats.push_back(entry);
+	}
+	catch (...) {
+		std::cout << "Error loading row from file." << std::endl;
+	}
 }
 
 //clears vector holding process_stats structs
