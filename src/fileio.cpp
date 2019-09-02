@@ -20,7 +20,7 @@ const char* 		BOGUS_FILE = "BOGUS.txt";
 const char*		 	RESULTS_FILE = "results.txt";
 using namespace std;
 
-int test() {
+int main() {
 	int total_points = 100; //assume success
 	int iRet = FAIL;
 

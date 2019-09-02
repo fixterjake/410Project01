@@ -11,7 +11,7 @@
 const char* 		source = "TestData.txt";
 using namespace std;
 
-int main() {
+int test() {
 	int points = 100;
 	int iRet = FAIL;
 	iRet = loadData(source);

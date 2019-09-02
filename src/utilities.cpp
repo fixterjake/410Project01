@@ -13,7 +13,7 @@
 #include "utilities.h"
 
 //Global list of process_stats structs
-std::vector<process_stats> list;
+std::vector<process_stats> processStats;
 
 //Parse row into integers
 //Create new struct based on parsed integers & add to vector
@@ -31,7 +31,7 @@ void processRow(std::string row) {
 	entry.process_number = std::stoi(parsed[0]);
 	entry.start_time = std::stoi(parsed[1]);
 	entry.cpu_time = std::stoi(parsed[2]);
-	list.push_back(entry);
+	processStats.push_back(entry);
 }
 
 //clears vector holding process_stats structs
@@ -40,10 +40,9 @@ void processRow(std::string row) {
 //
 //returns SUCCESS if all goes well or COULD_NOT_OPEN_FILE
 int loadData(const char* filename) {
-	list.clear();
+	processStats.clear();
 	std::ifstream myfile;
 	myfile.open(filename);
-	std::cout << "File name: " << filename << " is open: " << myfile.is_open() << std::endl;
 	if (!myfile.is_open()) {
 		myfile.close();
 		return COULD_NOT_OPEN_FILE;
@@ -57,6 +56,8 @@ int loadData(const char* filename) {
 	return SUCCESS;
 }
 
+//Serialize each vector entry into strings with correct comma separated format
+//Returns given string to be written to the file
 std::string serializeVector(process_stats entry) {
 	std::string serialzedEntry =
 			std::to_string(entry.process_number) + "," +
@@ -71,7 +72,6 @@ std::string serializeVector(process_stats entry) {
 //if the file exists, overwrite its contents.
 //returns SUCCESS if all goes well or COULD_NOT_OPEN_FILE
 int saveData(const char* filename) {
-
 	std::ofstream myfile;
 	myfile.open(filename, std::ofstream::trunc);
 	if (!myfile.is_open()) {
@@ -80,7 +80,7 @@ int saveData(const char* filename) {
 	}
 
 	std::string row;
-	for (process_stats entry : list) {
+	for (process_stats entry : processStats) {
 		row = serializeVector(entry);
 		myfile << row << std::endl;
 	}
@@ -108,13 +108,13 @@ bool compareProcessStatsCpu(process_stats a, process_stats b) {
 void sortData(SORT_ORDER mySortOrder) {
 	switch(mySortOrder) {
 		case SORT_ORDER::PROCESS_NUMBER:
-			std::sort(list.begin(), list.end(), compareProcessStatsNumber);
+			std::sort(processStats.begin(), processStats.end(), compareProcessStatsNumber);
 			break;
 		case SORT_ORDER::CPU_TIME:
-			std::sort(list.begin(), list.end(), compareProcessStatsCpu);
+			std::sort(processStats.begin(), processStats.end(), compareProcessStatsCpu);
 			break;
 		case SORT_ORDER::START_TIME:
-			std::sort(list.begin(), list.end(), compareProcessStatsStart);
+			std::sort(processStats.begin(), processStats.end(), compareProcessStatsStart);
 			break;
 	}
 }
@@ -123,9 +123,9 @@ void sortData(SORT_ORDER mySortOrder) {
 //then deletes it from the vector
 process_stats getNext() {
 	process_stats value;
-	if (list.size() > 0) {
-		value = list.front();
-		list.erase(list.begin());
+	if (processStats.size() > 0) {
+		value = processStats.front();
+		processStats.erase(processStats.begin());
 		return value;
 	}
 	return value;
