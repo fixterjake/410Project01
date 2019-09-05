@@ -28,7 +28,7 @@ void processRow(std::string row) {
 		}
 	}
 	process_stats entry;
-	//Ensure data from file is correct
+	//Ensure data from file is correct type
 	try {
 		entry.process_number = std::stoi(parsed[0]);
 		entry.start_time = std::stoi(parsed[1]);
@@ -43,7 +43,6 @@ void processRow(std::string row) {
 //clears vector holding process_stats structs
 //attempt to open file 'filename' to read, parse its rows
 //into process_stats structs and add these structs to a vector
-//
 //returns SUCCESS if all goes well or COULD_NOT_OPEN_FILE
 int loadData(const char* filename) {
 	processStats.clear();
